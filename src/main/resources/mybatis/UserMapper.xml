@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.UserMapper">
+
+	<select id="findOne" parameterType="long" resultMap="userResultMap">
+		select * from tb_user where id = #{id}
+	</select>
+	
+	<select id="findWithDetail" parameterType="long" resultMap="userWithDetailResultMap">
+		select u.id, u.login_name, u.screen_name, u.name, u.password, u.salt, u.roles, u.avatar, u.created_at,
+		p.gender, p.brithday, p.location, p.about_me
+		from tb_user u left join tb_profile p on u.id = p.user_id
+		where u.id = #{id}
+	</select>
+	
+	<select id="findByLoginName" parameterType="string" resultMap="userResultMap">
+		select * from tb_user where login_name = #{loginName}
+	</select>
+
+	<select id="findByScreenName" parameterType="string" resultMap="userResultMap">
+		select  * from tb_user where screen_name = #{screenName}
+	</select>
+	
+	<select id="findNoFollow" resultMap="userResultMap">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select * from tb_user u 
+		where u.id != #{userId} and not exists(select 1 from tb_followership f where f.leader_id = u.id and f.follower_id = #{userId})
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countNoFollow" parameterType="long" resultType="long">
+		select count(1)
+		from tb_user u 
+		where u.id != #{userId} and not exists(select 1 from tb_followership f where f.leader_id = u.id and f.follower_id = #{userId})
+	</select>
+	
+	<insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_user (login_name, screen_name, name, password, salt, roles, avatar, created_at)
+		values (#{loginName}, #{screenName}, #{name}, #{password}, #{salt}, #{roles}, #{avatar}, #{createdAt, typeHandler=org.joda.time.mybatis.handlers.DateTimeTypeHandler})
+	</insert>
+	
+	<update id="update" parameterType="User">
+		update tb_user set
+	    screen_name = #{screenName}, name = #{name}, password = #{password},
+	    salt = #{salt}, roles = #{roles}, avatar = #{avatar}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		delete from tb_user where id = #{id}
+	</delete>
+	
+	<resultMap id="userResultMap" type="User">
+		<id property="id" column="id"/>
+		<result property="loginName" column="login_name"/>
+		<result property="screenName" column="screen_name"/>
+		<result property="name" column="name"/>
+		<result property="password" column="password"/>
+		<result property="salt" column="salt"/>
+		<result property="roles" column="roles"/>
+		<result property="avatar" column="avatar"/>
+		<result property="createdAt" column="created_at" typeHandler="org.joda.time.mybatis.handlers.DateTimeTypeHandler"/>
+	</resultMap>
+	
+	<resultMap id="userWithDetailResultMap" type="User">
+		<id property="id" column="id"/>
+		<result property="loginName" column="login_name"/>
+		<result property="screenName" column="screen_name"/>
+		<result property="name" column="name"/>
+		<result property="password" column="password"/>
+		<result property="salt" column="salt"/>
+		<result property="roles" column="roles"/>
+		<result property="avatar" column="avatar"/>
+		<result property="createdAt" column="created_at" typeHandler="org.joda.time.mybatis.handlers.DateTimeTypeHandler"/>
+		<association property="profile" javaType="Profile">
+			<id property="id" column="profile_id"/>
+			<result property="gender" column="gender"/>
+			<result property="brithday" column="brithday"/>
+			<result property="location" column="location"/>
+			<result property="aboutMe" column="about_me"/>
+		</association>
+	</resultMap>
+
+</mapper> 

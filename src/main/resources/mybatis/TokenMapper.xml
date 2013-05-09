@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.TokenMapper">
+
+	<select id="findWithDetail" parameterType="long" resultMap="tokenWithDetailResultMap">
+		select t.id, t.name,
+		v.id as verse_id, v.num as verse_num, v.num2 as verse_num2, v.text as verse_text,
+		v.text2 as verse_text2, v.text3 as verse_text3, v.text4 as verse_text4, v.text5 as verse_text5,
+		b.id as book_id, b.title, b.abbr, b.part,
+		c.id as chapter_id, c.num as chapter_num
+		from tb_token t 
+			 left join tb_verse_token vt on t.id = vt.token_id
+			 left join tb_verse v on v.id = vt.verse_id
+			 left join tb_book b on b.id = t.book_id
+			 left join tb_chapter c on c.id = t.chapter_id
+		where t.id = #{id}
+	</select>
+	
+	<select id="findByName" parameterType="string" resultType="Token">
+		select id, name
+		from tb_token where name = #{name}
+	</select>
+	
+	<insert id="insert" parameterType="Token" useGeneratedKeys="true" keyProperty="id">
+		<bind name="bookId" value="book.id"/>
+		<bind name="chapterId" value="chapter.id"/>
+		insert into tb_token (name, book_id, chapter_id)
+		values(#{name}, #{bookId}, #{chapterId})
+	</insert>
+	
+	<resultMap id="tokenWithDetailResultMap" type="Token">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<association property="book" javaType="Book">
+			<id property="id" column="book_id" />
+			<result property="title" column="title" />
+			<result property="abbr" column="abbr" />
+			<result property="part" column="part" />
+		</association>
+		<association property="chapter" javaType="Chapter">
+			<id property="id" column="chapter_id" />
+			<result property="num" column="chapter_num" />
+		</association>
+		<collection property="verses" ofType="Verse">
+			<id property="id" column="verse_id" />
+			<result property="num" column="verse_num" />
+			<result property="num2" column="verse_num2" />
+			<result property="text" column="verse_text" />
+			<result property="text2" column="verse_text2" />
+			<result property="text3" column="verse_text3" />
+			<result property="text4" column="verse_text4" />
+			<result property="text5" column="verse_text5" />
+			<result property="title" column="verse_title" />
+			<result property="epilog" column="verse_epilog" />
+		</collection>
+	</resultMap>
+
+</mapper> 

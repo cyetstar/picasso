@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.VerseMapper">
+
+	<select id="findByNumAndChapterId" resultType="Verse">
+		select * from tb_verse where num = #{num} and chapter_id = #{chapterId}
+	</select>
+	
+	<select id="findByChapterId" parameterType="long" resultType="Verse">
+		select * from tb_verse where chapter_id = #{chapterId}
+	</select>
+	
+	
+	<select id="findByNumsAndChapterId" resultType="Verse">
+		select * from tb_verse where (num = #{num} or num2 = #{num} or num3 = #{num}) and chapter_id = #{chapterId}
+	</select>
+	
+	<insert id="insert" parameterType="Verse" useGeneratedKeys="true" keyProperty="id">
+		<bind name="bookId" value="book.id" />
+		<bind name="chapterId" value="chapter.id" />
+		insert into tb_verse (book_id, chapter_id, title, epilog, num, num2, num3,
+		 text, text2, text3, text4, text5, text6, text7, text8, text9, text10)
+		values (#{bookId}, #{chapterId}, #{title}, #{epilog}, #{num}, #{num2}, #{num3},
+		 #{text}, #{text2}, #{text3}, #{text4}, #{text5}, #{text6}, #{text7}, #{text8}, #{text9}, #{text10})
+	</insert>
+	
+	<update id="update" parameterType="Verse">
+		<bind name="paragraphId" value="paragraph == null ? null : paragraph.id" />
+		update tb_verse set paragraph_id = #{paragraphId}, num = #{num}, num2 = #{num2}, num3 = #{num3}, 
+		text = #{text}, text2 = #{text2}, text3 = #{text3}, text4 = #{text4}, text5 = #{text5}, 
+		text6 = #{text6}, text7 = #{text7}, text8 = #{text8}, text9 = #{text9}, text10 = #{text10}
+		where id = #{id}
+	</update>
+
+</mapper> 

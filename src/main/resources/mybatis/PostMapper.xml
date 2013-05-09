@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.PostMapper">
+
+	<select id="findByUserIdAndOpen" resultMap="postWithDetailResultMap">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select 
+		p.id, p.title, p.content, p.created_at, p.open,
+		u.id as user_id, u.screen_name, u.name, u.avatar,
+		t.id as token_id, t.name as token_name
+		from tb_post p left join tb_user u on p.user_id = u.id
+			 left join tb_post_token pt on p.id = pt.post_id
+			 left join tb_token t on t.id = pt.token_id
+		where p.user_id = #{userId} 
+		<if test="open != null">
+		and open = #{open}
+		</if>
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countByUserIdAndOpen" resultType="long">
+		select count(1)
+		from tb_post p 
+		where p.user_id = #{userId} 
+		<if test="open != null">
+		and open = #{open}
+		</if>
+	</select>
+	
+	<select id="findByUserIdOrUsersLeader" resultMap="postWithDetailResultMap">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select 
+		p.id, p.title, p.content, p.created_at, p.open,
+		u.id as user_id, u.screen_name, u.name, u.avatar,
+		t.id as token_id, t.name as token_name
+		from tb_post p left join tb_user u on p.user_id = u.id
+			 left join tb_post_token pt on p.id = pt.post_id
+			 left join tb_token t on t.id = pt.token_id
+		where p.user_id = #{userId}
+			  or (p.user_id in (select leader_id from tb_followership where follower_id = #{userId}) and p.open = true)
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countByUserIdOrUsersLeader" parameterType="long" resultType="long">
+		select count(1) 
+		from tb_post p
+		where p.user_id = #{userId}
+			  or (p.user_id in (select leader_id from tb_followership where follower_id = #{userId}) and p.open = true)
+	</select>
+	
+	<select id="findByCollectionId" resultMap="postWithDetailResultMap">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select 
+		p.id, p.title, p.content, p.created_at, p.open,
+		u.id as user_id, u.screen_name, u.name, u.avatar,
+		t.id as token_id, t.name as token_name
+		from tb_post p left join tb_user u on p.user_id = u.id
+			 left join tb_post_token pt on p.id = pt.post_id
+			 left join tb_token t on t.id = pt.token_id
+		where p.user_id in (select leader_id 
+							from tb_followership f left join tb_followership_followershipcollection ff on f.id = ff.followership_id
+								 left join tb_followership_collection fc on fc.id = ff.followership_collection_id
+							where fc.id = #{collectionId}) 
+		and p.open = true
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countByCollectionId" parameterType="long" resultType="long">
+		select count(1) 
+		from tb_post p
+		where p.user_id in 
+			(select leader_id 
+			from tb_followership f left join tb_followership_followershipcollection ff on f.id = ff.followership_id
+			left join tb_followership_collection fc on fc.id = ff.followership_collection_id
+			where fc.id = #{collectionId}) 
+		and p.open = true
+	</select>
+	
+	<insert id="insert" parameterType="Post" useGeneratedKeys="true" keyProperty="id">
+		<bind name="userId" value="user.id" />
+		insert into tb_post (title, content, created_at, open, user_id)
+		values (#{title}, #{content}, #{createdAt, typeHandler=org.joda.time.mybatis.handlers.DateTimeTypeHandler}, #{open}, #{userId})
+	</insert>
+	
+	<resultMap id="postWithDetailResultMap" type="Post">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="createdAt" column="created_at" typeHandler="org.joda.time.mybatis.handlers.DateTimeTypeHandler"/>
+		<result property="open" column="open"/>
+		<association property="user" javaType="User">
+			<id property="id" column="user_id"/>
+			<result property="screenName" column="screen_name"/>
+			<result property="name" column="name"/>
+			<result property="avatar" column="avatar"/>
+		</association>
+		<collection property="tokens" ofType="Token">
+			<id property="id" column="token_id"/>
+			<result property="name" column="token_name"/>
+		</collection>
+	</resultMap>
+
+</mapper> 

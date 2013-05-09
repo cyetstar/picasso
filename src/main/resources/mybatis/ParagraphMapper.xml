@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.ParagraphMapper">
+
+	<select id="findWithDetail" parameterType="long" resultMap="paragraphResultMap">
+		select p.*, v.id as verse_id, v.title as verse_title, v.num, v.num2, v.num3,
+		v.text, v.text2, v.text3, v.text4, v.text5, v.text6, v.text7, v.text8, v.text9, v.text10,
+		c.id as chapter_id, c.num as chapter_num, c.book_id, c.contain_join_verse
+		from tb_paragraph p left join tb_verse v on p.id = v.paragraph_id
+		left join tb_chapter c on c.id = p.chapter_id
+		where p.id = #{id}
+	</select>
+	
+	<select id="findWithDetailByChapterId" parameterType="long" resultMap="paragraphResultMap">
+		select p.*, v.id as verse_id, v.title as verse_title, v.num, v.num2, v.num3,
+		v.text, v.text2, v.text3, v.text4, v.text5, v.text6, v.text7, v.text8, v.text9, v.text10
+		from tb_paragraph p left join tb_verse v on p.id = v.paragraph_id
+		where p.chapter_id = #{chapterId}
+	</select>
+
+	<insert id="insert" parameterType="paragraph" useGeneratedKeys="true" keyProperty="id">
+		<bind name="chapterId" value="chapter.id"/>
+		insert into tb_paragraph (chapter_id, title, subtitle, section_title, related_title, dialog_title, epilog, type)
+		values (#{chapterId}, #{title}, #{subtitle}, #{sectionTitle}, #{relatedTitle}, #{dialogTitle}, #{epilog}, #{type})
+	</insert>
+	
+	<update id="update" parameterType="paragraph">
+		update tb_paragraph set
+	    title = #{title}, subtitle = #{subtitle}, section_title = #{sectionTitle}, related_title = #{relatedTitle}, 
+	    dialog_title = #{dialogTitle}, epilog = #{epilog}, type = #{type}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		delete from tb_paragraph where id = #{id}
+	</delete>
+	
+	<resultMap id="paragraphResultMap" type="paragraph">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="subtitle" column="subtitle"/>
+		<result property="sectionTitle" column="section_title"/>
+		<result property="relatedTitle" column="related_title"/>
+		<result property="dialogTitle" column="dialog_title"/>
+		<result property="epilog" column="epilog"/>
+		<result property="type" column="type"/>
+		<association property="chapter" javaType="chapter">
+			<id property="id" column="chapter_id"/>
+			<result property="num" column="chapter_num"/>
+			<result property="containJoinVerse" column="contain_join_verse"/>
+			<association property="book" javaType="book">
+				<id property="id" column="book_id"/>
+			</association>
+		</association>
+		<collection property="verses" ofType="verse">
+			<id property="id" column="verse_id"/>
+			<result property="title" column="verse_title"/>
+			<result property="num" column="num"/>
+			<result property="num2" column="num2"/>
+			<result property="num3" column="num3"/>
+			<result property="text" column="text"/>
+			<result property="text2" column="text2"/>
+			<result property="text3" column="text3"/>
+			<result property="text4" column="text4"/>
+			<result property="text5" column="text5"/>
+			<result property="text6" column="text6"/>
+			<result property="text7" column="text7"/>
+			<result property="text8" column="text8"/>
+			<result property="text9" column="text9"/>
+			<result property="text10" column="text10"/>
+		</collection>
+	</resultMap>
+	
+</mapper> 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.ChapterMapper">
+
+	<select id="findOne" resultType="chapter">
+		select c.id, c.num, c.contain_join_verse as containJoinVerse from tb_chapter c where c.id = #{id}
+	</select>
+
+
+	<select id="findWithDetail" resultMap="chapterWithDetailResultMap">
+		select c.id, c.num as chapter_num, c.contain_join_verse,
+		b.id as book_id, b.title as book_title, b.abbr as book_abbr, b.part as book_part,
+		p.id as paragraph_id, p.title as paragraph_title, p.subtitle, p.section_title, p.related_title, p.dialog_title, p.epilog, p.type as paragraph_type, 
+		v.id as verse_id, v.title as verse_title, v.num as verse_num, v.num2 as verse_num2, v.num3 as verse_num3, 
+		v.text as verse_text, v.text2 as verse_text2, v.text3 as verse_text3, v.text4 as verse_text4, v.text5 as verse_text5, 
+		v.text6 as verse_text6, v.text7 as verse_text7, v.text8 as verse_text8, v.text9 as verse_text9, v.text10 as verse_text10
+		from tb_chapter c 
+			 left join tb_book b on b.id = c.book_id
+			 left join tb_paragraph p on c.id = p.chapter_id
+			 left join tb_verse v on p.id = v.paragraph_id
+		where c.id = #{id}
+	</select>
+
+	<select id="findAll" resultMap="chapterResultMap">
+		select id, num, book_id, contain_join_verse as containJoinVerse
+		from tb_chapter
+	</select>
+	
+	<select id="findWithDetailByNumAndBookId" resultMap="chapterWithDetailResultMap">
+		select c.id, c.num as chapter_num, c.contain_join_verse,
+		b.id as book_id, b.title as book_title, b.abbr as book_abbr, b.part as book_part,
+		p.id as paragraph_id, p.title as paragraph_title, p.subtitle, p.section_title, p.related_title, p.dialog_title, p.epilog, p.type as paragraph_type,
+		v.id as verse_id, v.title as verse_title, v.num as verse_num, v.num2 as verse_num2, v.num3 as verse_num3, 
+		v.text as verse_text, v.text2 as verse_text2, v.text3 as verse_text3, v.text4 as verse_text4, v.text5 as verse_text5, 
+		v.text6 as verse_text6, v.text7 as verse_text7, v.text8 as verse_text8, v.text9 as verse_text9, v.text10 as verse_text10
+		from tb_chapter c 
+			 left join tb_book b on b.id = c.book_id
+			 left join tb_paragraph p on c.id = p.chapter_id
+			 left join tb_verse v on p.id = v.paragraph_id
+		where c.num = #{num} and b.id = #{bookId}
+	</select>
+	
+	<select id="findByNumAndBookId" resultType="chapter">
+		select c.id, c.num, c.contain_join_verse as containJoinVerse
+		from tb_chapter c left join tb_book b on c.book_id = b.id
+		where c.num = #{num} and b.id = #{bookId}
+	</select>
+	
+	<select id="findChaptersByBookId" parameterType="string" resultType="chapter">
+		select c.id, c.num, c.contain_join_verse as containJoinVerse
+		from tb_chapter c where c.book_id = #{bookId}
+	</select>
+	
+	<resultMap id="chapterResultMap" type="chapter">
+		<id property="id" column="id" />
+		<result property="num" column="num" />
+		<result property="containJoinVerse" column="contain_join_verse" />
+		<association property="book" javaType="Book">
+			<id property="id" column="book_id"/>
+		</association>
+	</resultMap>
+
+	<resultMap id="chapterWithDetailResultMap" type="chapter">
+		<id property="id" column="id" />
+		<result property="num" column="chapter_num" />
+		<result property="containJoinVerse" column="contain_join_verse" />
+		<association property="book" javaType="Book">
+			<id property="id" column="book_id"/>
+			<id property="title" column="book_title"/>
+			<id property="abbr" column="book_abbr"/>
+			<id property="part" column="book_part"/>
+		</association>
+		<collection property="paragraphs" ofType="paragraph">
+			<id property="id" column="paragraph_id"/>
+			<result property="title" column="paragraph_title"/>
+			<result property="subtitle" column="subtitle"/>
+			<result property="sectionTitle" column="section_title"/>
+			<result property="relatedTitle" column="related_title"/>
+			<result property="dialogTitle" column="dialog_title"/>
+			<result property="epilog" column="epilog"/>
+			<result property="type" column="paragraph_type"/>
+			<collection property="verses" ofType="verse" columnPrefix="verse_">
+				<id property="id" column="id"/>
+				<result property="title" column="title"/>
+				<result property="num" column="num"/>
+				<result property="num2" column="num2"/>
+				<result property="num3" column="num3"/>
+				<result property="text" column="text"/>
+				<result property="text2" column="text2"/>
+				<result property="text3" column="text3"/>
+				<result property="text4" column="text4"/>
+				<result property="text5" column="text5"/>
+				<result property="text6" column="text6"/>
+				<result property="text7" column="text7"/>
+				<result property="text8" column="text8"/>
+				<result property="text9" column="text9"/>
+				<result property="text10" column="text10"/>
+			</collection>
+		</collection>
+	</resultMap>
+
+</mapper> 

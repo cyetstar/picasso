@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.FollowershipCollectionMapper">
+
+	<select id="findByUserId" parameterType="long" resultType="FollowershipCollection">
+		select * from tb_followership_collection where user_id = #{userId}
+	</select>
+	
+	<insert id="insert" parameterType="FollowershipCollection" useGeneratedKeys="true" keyProperty="id">
+		<bind name="userId" value="user.id"/>
+		insert into tb_followership_collection(name, user_id)
+		values(#{name}, #{userId})
+	</insert>
+
+</mapper> 

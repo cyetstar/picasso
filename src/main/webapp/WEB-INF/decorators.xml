@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/layouts/">
+	<excludes>
+		<pattern>/static/*</pattern>
+		<pattern>/api/*</pattern>
+		
+		<pattern>/posts/list*</pattern>
+		<pattern>/posts/following-list*</pattern>
+		
+		<pattern>/bible/token-content*</pattern>
+		<pattern>/bible/chapter-content*</pattern>
+		<pattern>/bible/chapters*</pattern>
+		
+		<pattern>/followership/following-aside*</pattern>
+		<pattern>/followership/remark*</pattern>
+		
+		
+		
+	</excludes>
+	
+	<decorator name="unlogin" page="unlogin.jsp">
+		<pattern>/login</pattern>
+		<pattern>/signup</pattern>
+		<pattern>/error/*</pattern>
+	</decorator>
+	
+	<decorator name="admin" page="admin-layout.jsp">
+		<pattern>/admin/*</pattern>
+	</decorator>
+	
+	<decorator name="default" page="default-layout.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+</decorators>

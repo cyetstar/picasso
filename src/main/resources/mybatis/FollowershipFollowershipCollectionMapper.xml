@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.FollowershipFollowershipCollectionMapper">
+	
+	<insert id="insert">
+		insert into tb_followership_followershipcollection (followership_id, followership_collection_id)
+		values (#{followershipId}, #{followershipCollectionId})
+	</insert>
+	
+	<delete id="deleteByFollowershipId" parameterType="long">
+		delete from tb_followership_followershipcollection 
+		where followership_id = #{followershipId}
+	</delete>
+
+</mapper> 

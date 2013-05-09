@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.VerseTokenMapper">
+	
+	<insert id="insert">
+		insert into tb_verse_token (verse_id, token_id)
+		values (#{verseId}, #{tokenId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb_verse_token where verse_id = #{verseId} and token_id = #{tokenId}
+	</delete>
+
+</mapper> 

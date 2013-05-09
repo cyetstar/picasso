@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.ProfileMapper">
+
+	<select id="findOne" parameterType="long" resultType="Profile">
+		select id, gender, brithday, location, about_me as aboutMe 
+		from tb_profile where id = #{id}
+	</select>
+	
+	<select id="findByUserId" parameterType="long" resultType="Profile">
+		select id, gender, brithday, location, about_me as aboutMe 
+		from tb_profile where user_id = #{userId}
+	</select>
+
+	
+	<insert id="insert" parameterType="Profile" useGeneratedKeys="true" keyProperty="id">
+		<bind name="userId" value="user.id"/>
+		insert into tb_profile (gender, brithday, location, about_me, user_id)
+		values (#{gender}, #{brithday}, #{location}, #{aboutMe}, #{userId})
+	</insert>
+	
+	<update id="update" parameterType="Profile">
+		update tb_profile set
+	    gender = #{gender}, brithday = #{brithday}, location = #{location}, about_me = #{aboutMe}
+		where id = #{id}
+	</update>
+	
+</mapper> 

@@ -1,0 +1,352 @@
+/********* common **********/
+h3.aside-heading {
+  font-size: 14px; font-weight: normal;
+}
+
+.heading1 {
+  font-size: 20px; font-weight: bold;
+}
+
+.heading2 {
+  font-size: 16px; font-weight: bold;
+}
+
+.heading3 {
+  font-size: 14px; font-weight: bold;
+}
+/***********头像************/
+dl.avatar-large {
+  text-align: center; margin: 0;
+}
+
+img.avatar-large,dl.avatar-large img {
+  width: 120px; height: 120px;
+}
+
+dl.avatar-large dd {
+  height: 60px; text-align: center; overflow: hidden; margin-top: 5px;
+}
+
+dl.avatar-middle {
+  width: 100px; text-align: center; margin: 0;
+}
+
+img.avatar-middle,dl.avatar-middle img {
+  width: 60px; height: 60px;
+}
+
+dl.avatar-middle dd {
+  height: 60px; text-align: center; overflow: hidden; margin: 0;
+}
+
+dl.avatar-small {
+  width: 70px; text-align: center; margin: 0px;
+}
+
+img.avatar-small,dl.avatar-small img {
+  width: 45px; height: 45px;
+}
+
+dl.avatar-small dd {
+  height: 40px; text-align: center; overflow: hidden; margin-left: 0;
+}
+
+dl.user-intro {
+  overflow: hidden; margin: 0;
+}
+
+dl.user-intro dt {
+  float: left; margin-right: 25px;
+}
+
+dl.user-intro .intro-info {
+  overflow: hidden; margin: 0; list-style: none;
+}
+
+dl.user-intro .intro-info .title {
+  display: inline-block; margin: 8px 4px 8px 0; font-size: 16px; font-weight: bold;
+}
+
+.overhead {
+  padding: 30px 25px 20px; border-bottom: 1px solid #ddd;
+}
+
+.opacity-50 {
+  opacity: 0.50; filter: alpha(opacity =                         50);
+}
+
+.form-actions.background-none {
+  background: none; border-top: none;
+}
+/*********common end ********/
+#heading {
+  color: #555; font-family: "\5FAE\8F6F\96C5\9ED1"; font-weight: normal;
+}
+
+#masthead {
+  padding-top: 20px; overflow: hidden; background-color: #eefdf3; min-height: 80px;
+}
+
+#masthead blockquote {
+  border-left: none; margin: 12px 0 20px;
+}
+
+#masthead blockquote p {
+  font-size: 14px;
+}
+
+#masthead blockquote small {
+  font-size: 12px;
+}
+
+#main-nav {
+  margin-top: 15px; padding-left: 20px; overflow: hidden;
+}
+
+/***********登录\注册************/
+.window-form {
+  max-width: 300px; padding: 19px 29px 29px; margin: 40px auto 50px; background-color: #fff; border: 1px solid #e5e5e5; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05); -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05); box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.window-form .alert {
+  margin-bottom: 10px;
+}
+
+.window-form h4 small {
+  margin-left: 10px; font-size: 12px;
+}
+/********** 首页 ************/
+#user-index-header .avatar-large {
+  margin-right: 25px;
+}
+
+#user-home-header a.nickname {
+  margin-right: 8px;
+}
+
+#user-home-header ul.intro-info {
+  min-height: 100px;
+}
+
+#posts {
+  margin-top: 30px;
+}
+
+#posts-list {
+  clear: both;
+}
+
+#posts .post {
+  margin: 20px 0;
+}
+
+#posts .post-content {
+  min-height: 75px; border-bottom: 1px solid #ddd; padding-bottom: 10px;
+}
+
+#posts .tokens {
+  margin: 4px 0;
+}
+
+#posts .tokens .label {
+  margin-right: 4px; cursor: pointer;
+}
+
+.open-dropdown .dropdown-menu {
+  min-width: 100px;
+}
+
+.collection-dropdown {
+  margin: 0 8px 8px 0;
+}
+
+.collection-dropdown .dropdown-toggle {
+  text-decoration: none;
+}
+
+.collection-dropdown .caret {
+  border-top-color: #005580;
+}
+
+.collection-dropdown .dropdown-menu>li>a {
+  width: 160px; white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis; overflow: hidden;
+}
+
+.custom.modal.fade.in {
+  top: 15%;
+}
+
+.custom .modal-header h5 {
+  margin: 5px auto; font-family: "\5FAE\8F6F\96C5\9ED1";
+}
+
+.custom .modal-footer {
+  min-height: 15px;
+}
+
+.remark-follow {
+  cursor: pointer;
+}
+
+.new-collection-form input[type='text'] {
+  width: 150px;
+}
+
+.new-collection-form button {
+  margin-left: 5px;
+}
+
+.new-collection-btn {
+  margin-bottom: 20px;
+}
+
+ul.followership-collection {
+  list-style: none;
+}
+
+ul.followership-collection li {
+  float: left; width: 50%;
+}
+/********** 圣经 ************/
+#book-list {
+  height: 160px; overflow-y: scroll;
+  background-attachment:scroll;
+}
+
+#chapter-list {
+  max-height: 170px; overflow-y: auto;
+}
+
+#chapter-list li {
+  width: 42px; text-align: center;
+}
+
+#read-header {
+  padding: 15px 0 10px; border-bottom: 1px solid #ddd;
+}
+
+#bible-selector .caret {
+  margin-left: 4px;
+}
+
+#bible-content {
+  padding: 15px 50px; font-size: 14px; line-height: 2em; font-size: 14px;
+}
+
+#bible-content .s {
+  margin-top: 1em; margin-bottom: 1em;
+}
+
+#bible-content .r {
+  font-style: italic; font-size: 12px;
+}
+
+#bible-content .p {
+  margin-top: 1em;
+}
+
+#bible-content .q {
+  text-indent: 2em;
+}
+
+#bible-content .v {
+  display: inline; margin-right: 4px;
+}
+
+#bible-content .v .l {
+  color: #777; font-weight: bold;
+}
+
+#bible-content .read-more {
+  margin: 2em auto;
+}
+
+#book-menu {
+  margin: 10px;
+}
+
+#book-menu h5 {
+  margin-bottom: 5px;
+}
+
+#old-testament {
+  margin-bottom: 5px;
+}
+
+/*********family***********/
+#user-list {
+  padding: 25px 0;
+}
+
+#user-list dl.user-intro {
+  float: left; overflow: hidden; padding: 0 25px; width: 300px; margin-bottom: 20px;
+}
+
+#user-list dl.user-intro .btn {
+  float: right; margin-right: 25px;
+}
+/******** setting ********/
+.input-file-container {
+  position: relative; overflow: hidden;
+}
+
+.input-file {
+  height: 36px; overflow: hidden; position: absolute; right: 0; top: 0; opacity: 0; filter: alpha(opacity =         0); cursor: pointer; direction: ltr;
+}
+
+#file-name-to-upload {
+  padding-left: 3px;
+}
+
+#upload-btn-container {
+  margin: 10px auto 8px;
+}
+
+#avatar-crop-area {
+  overflow: hidden;
+}
+
+#avatar-origin {
+  width: 300px; height: 300px; text-align: center; display: table-cell; vertical-align: middle; float: left;
+}
+
+#avatar-preview {
+  width: 130px; height: 130px; overflow: hidden; margin-left: 325px;
+}
+
+/******** 侧边 **********/
+#friends .avatar-small {
+  float: left; margin-bottom: 10px;
+}
+
+.aside-block {
+  margin-top: 25px;
+}
+
+.aside-item {
+  clear: both; margin-bottom: 25px; overflow: hidden;
+}
+
+.aside-item h6 {
+  font-weight: normal; height: 42px; overflow: hidden; margin: 0 0 5px;
+}
+
+.aside-item .avatar-small {
+  float: left;
+}
+
+.aside-item .avatar-small+.item-content {
+  margin-left: 70px
+}
+
+.aside-item .label {
+  margin-left: 2px;
+}
+/********* admin ********/
+tbody > tr > td{
+  cursor: pointer;
+}
+tr.selected > td{
+  background-color: #eefdf3;
+}

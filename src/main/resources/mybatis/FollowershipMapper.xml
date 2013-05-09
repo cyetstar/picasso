@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.FollowershipMapper">
+
+	<select id="findOne" parameterType="long" resultMap="followershipResultMap">
+		select *
+		from tb_followership f
+		where f.id = #{id}
+	</select>
+
+	<select id="findLeadersByFollowerId" resultType="User">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select u.id, u.screen_name as screenName, u.name, u.avatar 
+		from tb_followership f right join tb_user u on f.leader_id = u.id 
+		where f.follower_id = #{followerId}
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countLeadersByFollowerId" parameterType="long" resultType="long">
+		select count(u.id) 
+		from tb_followership f right join tb_user u on f.leader_id = u.id 
+		where f.follower_id = #{followerId}
+	</select>
+
+	<select id="findFollowersByLeaderId" resultType="User">
+		<bind name="offset" value="pageable.offset"/>
+		<bind name="pageSize" value="pageable.pageSize"/>
+		<bind name="property" value="pageable.sort!=null ? pageable.sort.iterator().next().property : null"/>
+		<bind name="direction" value="pageable.sort!=null ? pageable.sort.iterator().next().direction : null"/>
+		select u.id, u.screen_name as screenName, u.name, u.avatar 
+		from tb_followership f right join tb_user u on f.leader_id = u.id 
+		where f.leader_id = #{leaderId}
+		<if test="pageable.sort != null">
+		order by ${property} ${direction}
+		</if>
+		limit #{offset}, #{pageSize}
+	</select>
+	
+	<select id="countFollowersByLeaderId" parameterType="long" resultType="long">
+		select count(u.id) 
+		from tb_followership f right join tb_user u on f.leader_id = u.id 
+		where f.leader_id = #{leaderId}
+	</select>
+	
+	<select id="findByLeaderIdAndFollowerId" resultMap="followershipResultMap">
+		select f.id, f.remark, f.created_at, fc.id as collection_id, fc.name
+		from tb_followership f 
+		left join tb_followership_followershipcollection ffc on f.id = ffc.followership_id
+		left join tb_followership_collection fc on fc.id = ffc.followership_collection_id 
+		where f.leader_id = #{leaderId} and f.follower_id = #{followerId}
+	</select>
+	
+	<insert id="insert" parameterType="Followership" useGeneratedKeys="true" keyProperty="id">
+		<bind name="leaderId" value="leader.id"/>
+		<bind name="followerId" value="follower.id"/>
+		insert into tb_followership (remark, leader_id, follower_id, created_at)
+		values (#{remark}, #{leaderId}, #{followerId}, #{createdAt, typeHandler=org.joda.time.mybatis.handlers.DateTimeTypeHandler})
+	</insert>
+	
+	<update id="update" parameterType="Followership">
+		update tb_followership set remark = #{remark}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		delete from tb_followership where id = #{id}
+	</delete>
+	
+	<delete id="deleteByLeaderIdAndFollowerId">
+		delete from tb_followership where leader_id = #{leaderId} and follower_id = #{followerId}
+	</delete>
+	
+	<resultMap id="followershipResultMap" type="Followership">
+		<id property="id" column="id"/>
+		<result property="remark" column="remark"/>
+		<result property="createdAt" column="created_at" typeHandler="org.joda.time.mybatis.handlers.DateTimeTypeHandler"/>
+		<collection property="followershipCollections" ofType="FollowershipCollection">
+			<id property="id" column="collection_id"/>
+			<id property="name" column="name"/>
+		</collection>
+	</resultMap>
+	
+</mapper> 

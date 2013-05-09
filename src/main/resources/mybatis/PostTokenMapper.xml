@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.PostTokenMapper">
+	
+	<insert id="insert">
+		insert into tb_post_token (post_id, token_id)
+		values (#{postId}, #{tokenId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb_post_token 
+		where post_id = #{postId} and token_id = #{tokenId}
+	</delete>
+
+</mapper> 

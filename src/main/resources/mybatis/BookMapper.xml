@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cyetstar.picasso.repository.mybatis.BookMapper">
+
+	<select id="findWithDetail" parameterType="string" resultMap="bookResultMap">
+		select b.id, b.title, b.abbr, b.part, b.seq, 
+		c.id as chapter_id, c.num 
+		from tb_book b left join tb_chapter c on b.id = c.book_id 
+		where b.id=#{value}
+	</select>
+
+	<select id="findByAbbr" parameterType="string" resultType="Book">
+		select * from tb_book where abbr=#{value}
+	</select>
+
+	<select id="findByTitle" parameterType="string" resultType="Book">
+		select * from tb_book where title=#{value}
+	</select>
+
+	<select id="findByTitleOrAbbr" resultType="Book">
+		select * from tb_book where title=#{title} or abbr=#{abbr}
+	</select>
+	
+	<select id="findAll" resultType="Book">
+		select * from tb_book 
+		<if test="property != null">
+		order by ${property} ${direction}
+		</if>
+	</select>
+
+	<resultMap id="bookResultMap" type="Book">
+		<id property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="abbr" column="abbr" />
+		<result property="part" column="part" />
+		<result property="seq" column="seq" />
+		<collection property="chapters" ofType="Chapter">
+			<id property="id" column="chapter_id" />
+			<result property="num" column="num" />
+		</collection>
+	</resultMap>
+
+</mapper> 
